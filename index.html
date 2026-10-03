@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulus Predikat - Logika Matematika</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* === CSS VARIABLES === */
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --white: #ffffff;
+            --dark-bg: #111827;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --transition: all 0.3s ease;
+        }
+
+        /* === GLOBAL RESET === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.2;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* === APP CONTAINER === */
+        #app {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === SLIDE SYSTEM === */
+        .slide-container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem 140px 1.5rem;
+            animation: fadeUp 0.4s ease forwards;
+        }
+
+        .slide-content {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* === COMPONENT: HERO / COVER === */
+        .hero-slide {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-meta {
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* === COMPONENT: BADGE === */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background-color: #dbeafe;
+            color: var(--primary-dark);
+            margin: 0 0.25rem;
+        }
+
+        /* === COMPONENT: BUTTONS === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* === COMPONENT: CARD GRID === */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            height: auto;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+            border-color: #bfdbfe;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        /* === COMPONENT: FORMULA BOX === */
+        .formula-box {
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .formula-box.small {
+            font-size: 1.2rem;
+            padding: 1rem;
+        }
+
+        .highlight-var { color: #f472b6; } /* Pink */
+        .highlight-quant { color: #60a5fa; } /* Blue */
+        .highlight-pred { color: #a7f3d0; } /* Green */
+
+        /* === COMPONENT: CODE BLOCK === */
+        pre {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        code .keyword { color: #c678dd; }
+        code .string { color: #98c379; }
+        code .function { color: #61afef; }
+        code .comment { color: #7f848e; font-style: italic; }
+        code .operator { color: #56b6c2; }
+        code .number { color: #d19a66; }
+
+        /* === COMPONENT: TABLE === */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .styled-table thead tr {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: left;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 1rem;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f1f5f9;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* === COMPONENT: ACCORDION === */
+        .accordion {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .accordion-item {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: #f1f5f9;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            padding: 0 1.25rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 1.25rem;
+            max-height: 500px; /* Arbitrary large number */
+            border-top: 1px solid var(--border);
+        }
+
+        /* === COMPONENT: STEPPER === */
+        .stepper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            left: 1.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+            opacity: 0.5;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateX(-10px);
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .step-indicator {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: var(--white);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-indicator {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 0 0 4px #dbeafe;
+        }
+
+        .step-content {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            flex-grow: 1;
+        }
+        
+        .step-content h4 { margin-bottom: 0.5rem; }
+
+        .stepper-controls {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* === COMPONENT: QUIZ === */
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            background-color: var(--white);
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            border-color: var(--primary-light);
+            background-color: #f0f9ff;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background-color: #e0f2fe;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--danger);
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .quiz-feedback {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            display: none;
+            font-weight: 500;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .quiz-controls {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .quiz-result {
+            text-align: center;
+            display: none;
+        }
+
+        .quiz-result h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quiz-score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, var(--border) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+        }
+        
+        .quiz-score-circle::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: var(--white);
+            border-radius: 50%;
+        }
+        
+        .quiz-score-circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === BOTTOM NAVIGATION === */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(650px, calc(100vw - 24px));
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 999px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+            height: 56px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .nav-progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .nav-progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-counter {
+            font-weight: 600;
+            font-size: 1rem;
+            min-width: 80px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .nav-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-menu-btn:hover {
+            color: var(--primary);
+        }
+
+        /* === MENU OVERLAY === */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            color: var(--white);
+        }
+
+        .menu-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .menu-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .menu-item.current {
+            background-color: var(--primary);
+            border-left: 4px solid #93c5fd;
+        }
+
+        .menu-item-num {
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        
+        .menu-item.current .menu-item-num {
+            color: #dbeafe;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .slide.active { padding: 1.5rem 1rem 130px 1rem; }
+            .card-grid { grid-template-columns: 1fr !important; gap: 1rem; }
+            .hero-title { font-size: 2.2rem; }
+            .slide-title { font-size: 1.75rem; }
+            .slide-subtitle { font-size: 1rem; }
+            .bottom-nav { width: calc(100vw - 16px); bottom: 10px; height: 50px; padding: 0 10px; }
+            .nav-counter { font-size: 0.85rem; min-width: 60px; }
+            .nav-btn { width: 36px; height: 36px; }
+            pre { font-size: 0.82rem; padding: 1rem; }
+            .formula-box { font-size: 1.1rem; padding: 0.85rem; }
+            .nav-menu-btn span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- SLIDES CONTAINER -->
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- SLIDE 1: Cover -->
+        <section class="slide hero-slide active" data-title="Cover">
+            <div class="slide-content">
+                <div style="margin-bottom: 2rem;">
+                    <span class="badge">Pahami</span>
+                    <span class="badge">Praktekkan</span>
+                    <span class="badge">Kuasai</span>
+                </div>
+                <h1 class="hero-title">Kalkulus Predikat</h1>
+                <p class="hero-subtitle">Proyek Akhir &middot; Logika Matematika &middot; 2026</p>
+                <div class="hero-meta">
+                    <p style="color: var(--text-main);">Dosen Pengampu: <strong>Dian Rachmawati, S.Si., M.Kom.</strong></p>
+                </div>
+                <button class="btn btn-primary" onclick="nextSlide()" style="margin-top: 2rem; font-size: 1.2rem; padding: 1rem 2rem;">
+                    Mulai Belajar &rarr;
+                </button>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Apa Itu Logika? -->
+        <section class="slide" data-title="Apa Itu Logika?">
+            <div class="slide-content">
+                <h2 class="slide-title">Evolusi Logika</h2>
+                <p class="slide-subtitle">Mengapa kita butuh Kalkulus Predikat?</p>
+                
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
+                    Logika Proposisi sangat berguna, tetapi memiliki keterbatasan. Kalkulus Predikat hadir untuk mengatasi batasan tersebut dengan membedah isi dari sebuah pernyataan.
+                </p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🔤</div>
+                        <h3 class="card-title">Logika Proposisi</h3>
+                        <p>Hanya melihat pernyataan sebagai satu kesatuan utuh (Benar/Salah).</p>
+                        <div class="formula-box small">P = "Budi pintar"</div>
+                        <p><em>Kelemahan: Tidak bisa menganalisis bagian dalam kalimat.</em></p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <h3 class="card-title">Kalkulus Predikat</h3>
+                        <p>Memecah pernyataan menjadi objek (subjek) dan sifat/relasinya (predikat).</p>
+                        <div class="formula-box small">P(x) = "x pintar"</div>
+                        <p><em>Kelebihan: Lebih detail, "Powerful" untuk matematika dan ilmu komputer.</em></p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📦</div>
+                        <h3 class="card-title">Kuantor</h3>
+                        <p>Mengukur "seberapa banyak" objek yang memenuhi predikat tersebut.</p>
+                        <div class="formula-box small">∀, ∃</div>
+                        <p><em>Kelebihan: Memungkinkan pernyataan umum seperti "Semua..." atau "Ada...".</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Konsep Dasar Predikat -->
+        <section class="slide" data-title="Konsep Dasar Predikat">
+            <div class="slide-content">
+                <h2 class="slide-title">Konsep Dasar Predikat</h2>
+                <p class="slide-subtitle">Mengenal Variabel dan Fungsi Pernyataan</p>
+
+                <div class="card" style="margin-bottom: 1.5rem; border-top: 4px solid var(--primary); text-align: center;">
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.5rem;">Apa itu Predikat?</h3>
+                    <p style="max-width: 800px; margin: 0 auto 0.5rem;">Dalam tata bahasa, predikat memberi informasi tentang subjek. Dalam logika, predikat adalah pernyataan yang mengandung satu atau lebih <span class="badge">variabel</span>.</p>
+                    <p style="max-width: 800px; margin: 0 auto; color: var(--text-main); font-weight: 500;">Predikat baru memiliki nilai kebenaran (True/False) JIKA variabel tersebut diganti dengan nilai spesifik.</p>
+                </div>
+
+                <div class="card-grid" style="margin-top: 0;">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0;">Contoh 1: Satu Variabel</h4>
+                            <span class="badge" style="background: #e0e7ff; color: #4338ca;">Monadik</span>
+                        </div>
+                        <div class="formula-box small" style="margin: 0 0 1rem 0;">P(x) : "x bilangan genap"</div>
+                        <ul style="margin-left: 1.5rem; color: var(--text-muted); padding-bottom: 0;">
+                            <li>P(4) &rarr; "4 genap" <span class="badge" style="background:#d1fae5; color:#065f46;">Benar</span></li>
+                            <li style="margin-top: 0.5rem;">P(5) &rarr; "5 genap" <span class="badge" style="background:#fee2e2; color:#991b1b;">Salah</span></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0;">Contoh 2: Dua Variabel</h4>
+                            <span class="badge" style="background: #fae8ff; color: #a21caf;">Relasi</span>
+                        </div>
+                        <div class="formula-box small" style="margin: 0 0 1rem 0;">Q(x, y) : "x > y"</div>
+                        <ul style="margin-left: 1.5rem; color: var(--text-muted); padding-bottom: 0;">
+                            <li>Q(5, 3) &rarr; "5 > 3" <span class="badge" style="background:#d1fae5; color:#065f46;">Benar</span></li>
+                            <li style="margin-top: 0.5rem;">Q(2, 7) &rarr; "2 > 7" <span class="badge" style="background:#fee2e2; color:#991b1b;">Salah</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Domain / Semesta Pembicaraan -->
+        <section class="slide" data-title="Domain Pembicaraan">
+            <div class="slide-content">
+                <h2 class="slide-title">Semesta Pembicaraan (Domain)</h2>
+                <p class="slide-subtitle">Universe of Discourse</p>
+
+                <p style="text-align: center; margin-bottom: 2rem;">
+                    Nilai kebenaran suatu predikat sangat bergantung pada <strong>Domain</strong> (himpunan semua nilai yang mungkin untuk variabel).
+                </p>
+
+                <div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--warning);">
+                    <h3 style="margin-bottom: 1rem;">Mengapa Domain Penting?</h3>
+                    <p>Pertimbangkan predikat <code style="background:#e2e8f0; padding:2px 6px; border-radius:4px;">P(x) : x² > 0</code></p>
+                    <p>Apakah pernyataan ini selalu benar? Jawabannya: <strong>Tergantung Domainnya!</strong></p>
+                </div>
+
+                <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card" style="background-color: #f0fdf4; border-color: #bbf7d0;">
+                        <h4 style="color: #166534;">Domain: Bilangan Bulat Positif</h4>
+                        <p>Jika x ∈ {1, 2, 3, ...}</p>
+                        <p>Maka P(x) selalu <strong>Benar</strong>, karena kuadrat bilangan bulat positif selalu > 0.</p>
+                    </div>
+                    <div class="card" style="background-color: #fef2f2; border-color: #fecaca;">
+                        <h4 style="color: #991b1b;">Domain: Bilangan Bulat</h4>
+                        <p>Jika x ∈ {..., -2, -1, 0, 1, 2, ...}</p>
+                        <p>Maka P(x) bisa <strong>Salah</strong>! Karena jika x = 0, maka 0² > 0 adalah Salah.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Kuantor Universal -->
+        <section class="slide" data-title="Kuantor Universal">
+            <div class="slide-content">
+                <h2 class="slide-title">Kuantor Universal <span style="color: var(--primary);">(&forall;)</span></h2>
+                <p class="slide-subtitle">"Untuk Semua" / "Untuk Setiap"</p>
+
+                <div class="formula-box">
+                    <span class="highlight-quant">∀x</span> <span class="highlight-pred">P</span>(<span class="highlight-var">x</span>)
+                </div>
+                
+                <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">
+                    Dibaca: "Untuk semua x, berlaku P(x)" atau "Setiap x memenuhi P(x)".
+                </p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h4 style="margin-bottom: 1rem;">Contoh Kehidupan Nyata</h4>
+                        <p>P(x) = "x memiliki NIM"</p>
+                        <p>Domain: Semua mahasiswa USU</p>
+                        <div class="formula-box small" style="background-color: #1e293b;">
+                            ∀x P(x)
+                        </div>
+                        <p><em>Artinya: "Semua mahasiswa USU memiliki NIM."</em></p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 1rem;">Contoh Matematika</h4>
+                        <p>Q(x) = "x + 0 = x"</p>
+                        <p>Domain: Bilangan Riil</p>
+                        <div class="formula-box small" style="background-color: #1e293b;">
+                            ∀x Q(x)
+                        </div>
+                        <p><em>Artinya: "Untuk setiap bilangan riil x, x ditambah 0 sama dengan x."</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Kuantor Eksistensial -->
+        <section class="slide" data-title="Kuantor Eksistensial">
+            <div class="slide-content">
+                <h2 class="slide-title">Kuantor Eksistensial <span style="color: var(--primary);">(&exists;)</span></h2>
+                <p class="slide-subtitle">"Terdapat" / "Ada setidaknya satu"</p>
+
+                <div class="formula-box">
+                    <span class="highlight-quant">∃x</span> <span class="highlight-pred">P</span>(<span class="highlight-var">x</span>)
+                </div>
+                
+                <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">
+                    Dibaca: "Ada (setidaknya satu) x, sehingga berlaku P(x)".
+                </p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h4 style="margin-bottom: 1rem;">Contoh Kehidupan Nyata</h4>
+                        <p>R(x) = "IPK x adalah 4.0"</p>
+                        <p>Domain: Mahasiswa Fasilkom-TI</p>
+                        <div class="formula-box small" style="background-color: #1e293b;">
+                            ∃x R(x)
+                        </div>
+                        <p><em>Artinya: "Ada (setidaknya satu) mahasiswa Fasilkom-TI yang IPK-nya 4.0."</em></p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 1rem;">Contoh Matematika</h4>
+                        <p>S(x) = "x² = 4"</p>
+                        <p>Domain: Bilangan Bulat</p>
+                        <div class="formula-box small" style="background-color: #1e293b;">
+                            ∃x S(x)
+                        </div>
+                        <p><em>Artinya: "Terdapat bilangan bulat x sedemikian rupa sehingga x² = 4." (Benar, karena ada x=2 atau x=-2)</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Negasi Kuantor -->
+        <section class="slide" data-title="Negasi Kuantor">
+            <div class="slide-content">
+                <h2 class="slide-title">Negasi Kuantor</h2>
+                <p class="slide-subtitle">Hukum De Morgan untuk Kuantor</p>
+
+                <p style="text-align: center; margin-bottom: 2rem;">Bagaimana cara menegasikan (membantah) pernyataan yang mengandung kuantor?</p>
+
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--danger);">1. Negasi dari "Semua" adalah "Ada yang TIDAK"</h3>
+                    <div class="formula-box small">
+                        ¬(∀x P(x)) ≡ ∃x ¬P(x)
+                    </div>
+                    <p><strong>Pernyataan:</strong> "Semua mahasiswa hadir." ( ∀x H(x) )</p>
+                    <p><strong>Bantahan:</strong> "TIDAK semua mahasiswa hadir" ≡ "ADA mahasiswa yang TIDAK hadir." ( ∃x ¬H(x) )</p>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; color: var(--danger);">2. Negasi dari "Ada" adalah "Semua TIDAK"</h3>
+                    <div class="formula-box small">
+                        ¬(∃x P(x)) ≡ ∀x ¬P(x)
+                    </div>
+                    <p><strong>Pernyataan:</strong> "Ada soal ujian yang sulit." ( ∃x S(x) )</p>
+                    <p><strong>Bantahan:</strong> "TIDAK ada soal ujian yang sulit" ≡ "SEMUA soal ujian TIDAK sulit (mudah)." ( ∀x ¬S(x) )</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Variabel Bebas & Terikat -->
+        <section class="slide" data-title="Variabel Bebas & Terikat">
+            <div class="slide-content">
+                <h2 class="slide-title">Variabel Bebas & Terikat</h2>
+                <p class="slide-subtitle">Bound vs Free Variables</p>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <p>Sebuah variabel x dikatakan <strong>terikat (bound)</strong> jika dikenai kuantor ∀x atau ∃x. Jika tidak, maka ia adalah variabel <strong>bebas (free)</strong>.</p>
+                </div>
+
+                <div class="formula-box" style="display:flex; justify-content:center; align-items:center; gap: 1rem;">
+                    <span>∀x</span> <span>P( <span style="color:#f472b6; border-bottom:2px dashed #f472b6;">x</span> , <span style="color:#a7f3d0; border-bottom:2px solid #a7f3d0;">y</span> )</span>
+                </div>
+
+                <div class="card-grid" style="grid-template-columns: 1fr 1fr; margin-top: 2rem;">
+                    <div class="card" style="text-align: center;">
+                        <h3 style="color: #f472b6; margin-bottom: 1rem;">Variabel 'x'</h3>
+                        <p style="font-size: 1.2rem; font-weight: bold;">TERIKAT</p>
+                        <p>Karena berada dalam cakupan kuantor ∀x</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h3 style="color: #10b981; margin-bottom: 1rem;">Variabel 'y'</h3>
+                        <p style="font-size: 1.2rem; font-weight: bold;">BEBAS</p>
+                        <p>Karena tidak ada kuantor ∀y atau ∃y yang mengikatnya</p>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
+                    <em>Catatan: Pernyataan hanya memiliki nilai kebenaran jika <strong>semua</strong> variabelnya terikat (atau diganti dengan konstanta).</em>
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Fungsi & Konstanta -->
+        <section class="slide" data-title="Fungsi & Konstanta">
+            <div class="slide-content">
+                <h2 class="slide-title">Fungsi & Konstanta</h2>
+                <p class="slide-subtitle">Elemen Pelengkap dalam Predikat</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📌</div>
+                        <h3 class="card-title">Konstanta</h3>
+                        <p>Objek spesifik/tertentu dari sebuah domain. Biasanya disimbolkan dengan huruf kecil awal alfabet (a, b, c) atau nama spesifik.</p>
+                        <div class="formula-box small" style="margin: 1rem 0;">a = "Budi"</div>
+                        <p>P(x) = "x suka apel"<br>P(a) = "Budi suka apel"</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">⚙️</div>
+                        <h3 class="card-title">Fungsi</h3>
+                        <p>Memetakan satu atau lebih objek ke objek lain dalam domain. Menghasilkan objek, BUKAN nilai kebenaran (True/False).</p>
+                        <div class="formula-box small" style="margin: 1rem 0;">f(x) = "Ayah dari x"</div>
+                        <p>Ayah(Budi) menghasilkan objek (misal: "Joko").<br>Tinggi(Ayah(Budi)) > 170.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Tabel Kebenaran -->
+        <section class="slide" data-title="Tabel Evaluasi">
+            <div class="slide-content">
+                <h2 class="slide-title">Evaluasi pada Domain Terbatas</h2>
+                <p class="slide-subtitle">Membuktikan Kuantor dengan Tabel</p>
+
+                <p>Jika domain kita berhingga dan kecil, kita bisa mengekspansi kuantor menjadi operasi logika proposisi biasa (AND / OR).</p>
+                
+                <div class="card" style="margin-bottom: 2rem; background: #e0f2fe; border: none;">
+                    <p><strong>Domain:</strong> D = { 1, 2, 3 }</p>
+                    <p><strong>Predikat:</strong> P(x) : "x > 0"</p>
+                </div>
+
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Nilai x</th>
+                                <th>P(x) : x > 0</th>
+                                <th>Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>x = 1</td>
+                                <td>1 > 0</td>
+                                <td><span class="badge" style="background:#d1fae5; color:#065f46;">True</span></td>
+                            </tr>
+                            <tr>
+                                <td>x = 2</td>
+                                <td>2 > 0</td>
+                                <td><span class="badge" style="background:#d1fae5; color:#065f46;">True</span></td>
+                            </tr>
+                            <tr>
+                                <td>x = 3</td>
+                                <td>3 > 0</td>
+                                <td><span class="badge" style="background:#d1fae5; color:#065f46;">True</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card">
+                        <h4>∀x P(x) ≡ P(1) ∧ P(2) ∧ P(3)</h4>
+                        <p>T ∧ T ∧ T = <strong>True</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4>∃x P(x) ≡ P(1) ∨ P(2) ∨ P(3)</h4>
+                        <p>T ∨ T ∨ T = <strong>True</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Kuantor Bersarang -->
+        <section class="slide" data-title="Kuantor Bersarang">
+            <div class="slide-content">
+                <h2 class="slide-title">Kuantor Bersarang (Nested)</h2>
+                <p class="slide-subtitle">Urutan Sangat Menentukan Makna!</p>
+
+                <p style="text-align: center; margin-bottom: 2rem;">Predikat sering kali memiliki lebih dari satu kuantor. <strong>Hati-hati: urutan kuantor yang berbeda tidak bisa ditukar sembarangan!</strong></p>
+
+                <p style="margin-bottom: 1rem;">Misalkan: <strong>M(x)</strong> = Mahasiswa, <strong>D(y)</strong> = Dosen, <strong>B(x,y)</strong> = x dibimbing oleh y.</p>
+
+                <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card" style="border-top: 4px solid var(--primary);">
+                        <div class="formula-box small" style="margin-top: 0;">∀x ∃y B(x,y)</div>
+                        <h4 style="margin-bottom: 0.5rem;">"Untuk setiap mahasiswa, ada (minimal satu) dosen pembimbing."</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Setiap mahasiswa punya pembimbingnya masing-masing. (Bisa dosen yang berbeda untuk setiap mahasiswa).</p>
+                        <div style="margin-top:1rem; font-size:2rem; text-align:center;">👨‍🎓→👨‍🏫 👩‍🎓→👩‍🏫</div>
+                    </div>
+                    
+                    <div class="card" style="border-top: 4px solid var(--danger);">
+                        <div class="formula-box small" style="margin-top: 0;">∃y ∀x B(x,y)</div>
+                        <h4 style="margin-bottom: 0.5rem;">"Ada satu dosen, yang membimbing SEMUA mahasiswa."</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Hanya ada 1 dosen sakti yang menjadi pembimbing untuk seluruh mahasiswa di kampus.</p>
+                        <div style="margin-top:1rem; font-size:2rem; text-align:center;">👨‍🎓↘<br>👩‍🎓→ 🦸‍♂️<br>🧑‍🎓↗</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: Inferensi -->
+        <section class="slide" data-title="Inferensi Predikat">
+            <div class="slide-content">
+                <h2 class="slide-title">Aturan Inferensi Predikat</h2>
+                <p class="slide-subtitle">Bagaimana menarik kesimpulan?</p>
+
+                <div class="stepper" id="inferensiStepper">
+                    <div class="step active">
+                        <div class="step-indicator">1</div>
+                        <div class="step-content">
+                            <h4>Universal Instantiation (UI)</h4>
+                            <div class="formula-box small" style="margin: 0.5rem 0;">∀x P(x) &rarr; P(c)</div>
+                            <p>Jika sesuatu berlaku untuk <em>semua</em> elemen di domain, maka ia pasti berlaku untuk elemen tertentu <em>c</em> di domain tersebut.<br>
+                            <em>Contoh: Semua manusia (x) pasti mati. Socrates (c) adalah manusia. Maka Socrates pasti mati.</em></p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-indicator">2</div>
+                        <div class="step-content">
+                            <h4>Universal Generalization (UG)</h4>
+                            <div class="formula-box small" style="margin: 0.5rem 0;">P(c) sembarang &rarr; ∀x P(x)</div>
+                            <p>Jika sesuatu berlaku untuk elemen <em>c</em> yang dipilih secara sembarang (tanpa asumsi khusus), maka ia berlaku untuk semua elemen.<br>
+                            <em>Sering dipakai di pembuktian matematis "Ambil sembarang x..."</em></p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-indicator">3</div>
+                        <div class="step-content">
+                            <h4>Existential Instantiation (EI)</h4>
+                            <div class="formula-box small" style="margin: 0.5rem 0;">∃x P(x) &rarr; P(c) untuk c tertentu</div>
+                            <p>Jika ada <em>setidaknya satu</em> elemen yang memenuhi P, kita bisa menamainya dengan <em>c</em> (tapi kita tidak tahu c yang mana secara spesifik, yang jelas ia ada).</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-indicator">4</div>
+                        <div class="step-content">
+                            <h4>Existential Generalization (EG)</h4>
+                            <div class="formula-box small" style="margin: 0.5rem 0;">P(c) untuk c tertentu &rarr; ∃x P(x)</div>
+                            <p>Jika kita tahu elemen <em>c</em> memenuhi P, maka terbukti bahwa <em>ada</em> elemen yang memenuhi P.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stepper-controls">
+                    <button class="btn btn-outline" id="btnNextStep" onclick="nextStepper()">Selanjutnya &darr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: Contoh Penerapan -->
+        <section class="slide" data-title="Translasi Bahasa">
+            <div class="slide-content">
+                <h2 class="slide-title">Translasi ke Logika Predikat</h2>
+                <p class="slide-subtitle">Mengubah Bahasa Alami menjadi Formula Matematika</p>
+
+                <p style="text-align: center; margin-bottom: 2rem;">Klik panel di bawah ini untuk melihat terjemahan dari Bahasa Indonesia ke notasi Kalkulus Predikat.</p>
+
+                <div class="accordion" id="translasiAccordion">
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            1. "Semua kucing adalah mamalia"
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p style="margin-top: 1rem;"><strong>Domain:</strong> Seluruh hewan.</p>
+                            <p><strong>Predikat:</strong> K(x) = x adalah kucing, M(x) = x adalah mamalia.</p>
+                            <div class="formula-box small">∀x ( K(x) &rarr; M(x) )</div>
+                            <p><em>Penting: Untuk kuantor Universal (∀), kita menggunakan implikasi (→).</em></p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            2. "Ada mahasiswa yang rajin dan cerdas"
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p style="margin-top: 1rem;"><strong>Domain:</strong> Seluruh manusia.</p>
+                            <p><strong>Predikat:</strong> M(x) = x mahasiswa, R(x) = x rajin, C(x) = x cerdas.</p>
+                            <div class="formula-box small">∃x ( M(x) ∧ R(x) ∧ C(x) )</div>
+                            <p><em>Penting: Untuk kuantor Eksistensial (∃), kita menggunakan konjungsi (AND / ∧).</em></p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            3. "Tidak ada burung yang bisa berenang"
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p style="margin-top: 1rem;"><strong>Domain:</strong> Seluruh hewan.</p>
+                            <p><strong>Predikat:</strong> B(x) = x burung, R(x) = x bisa berenang.</p>
+                            <p>Bisa ditulis dengan dua cara yang ekuivalen:</p>
+                            <div class="formula-box small" style="margin-bottom: 0.5rem;">∀x ( B(x) &rarr; ¬R(x) )</div>
+                            <p style="text-align: center;"><em>atauuu...</em></p>
+                            <div class="formula-box small" style="margin-top: 0.5rem;">¬∃x ( B(x) ∧ R(x) )</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14: Implementasi JavaScript -->
+        <section class="slide" data-title="Code: JavaScript">
+            <div class="slide-content">
+                <h2 class="slide-title">Implementasi dengan JavaScript</h2>
+                <p class="slide-subtitle">Mempraktekkan Konsep di VS Code</p>
+
+                <p>Kalkulus Predikat adalah fondasi dari banyak fungsi array (High Order Functions) di pemrograman modern. 
+                <code style="background:var(--border); padding:2px 5px; border-radius:4px;">every()</code> merepresentasikan <strong>∀</strong>, dan 
+                <code style="background:var(--border); padding:2px 5px; border-radius:4px;">some()</code> merepresentasikan <strong>∃</strong>.</p>
+
+<pre><code><span class="comment">// === KALKULUS PREDIKAT DENGAN JAVASCRIPT ===</span>
+
+<span class="comment">// 1. Definisi Domain (Semesta Pembicaraan)</span>
+<span class="keyword">const</span> mahasiswa = [
+  { nama: <span class="string">"Andi"</span>,  ipk: <span class="number">3.8</span>, semester: <span class="number">4</span> },
+  { nama: <span class="string">"Budi"</span>,  ipk: <span class="number">3.2</span>, semester: <span class="number">6</span> },
+  { nama: <span class="string">"Citra"</span>, ipk: <span class="number">4.0</span>, semester: <span class="number">2</span> },
+  { nama: <span class="string">"Dewi"</span>,  ipk: <span class="number">2.9</span>, semester: <span class="number">8</span> },
+  { nama: <span class="string">"Eka"</span>,   ipk: <span class="number">3.5</span>, semester: <span class="number">4</span> },
+];
+
+<span class="comment">// 2. Definisi Predikat (Fungsi yang return boolean)</span>
+<span class="keyword">const</span> <span class="function">cumlaude</span>    = (m) => m.ipk >= <span class="number">3.5</span>;
+<span class="keyword">const</span> <span class="function">lulusTepat</span>  = (m) => m.semester <= <span class="number">8</span>;
+<span class="keyword">const</span> <span class="function">ipkSempurna</span> = (m) => m.ipk === <span class="number">4.0</span>;
+
+<span class="comment">// 3. Kuantor Universal — ∀x P(x)</span>
+<span class="keyword">const</span> semuaCumlaude = mahasiswa.<span class="function">every</span>(cumlaude);
+console.<span class="function">log</span>(<span class="string">"∀x Cumlaude(x):"</span>, semuaCumlaude);   <span class="comment">// false</span>
+
+<span class="comment">// 4. Kuantor Eksistensial — ∃x P(x)</span>
+<span class="keyword">const</span> adaIpkSempurna = mahasiswa.<span class="function">some</span>(ipkSempurna);
+console.<span class="function">log</span>(<span class="string">"∃x IpkSempurna(x):"</span>, adaIpkSempurna); <span class="comment">// true</span>
+
+<span class="comment">// 5. Negasi Kuantor — ¬∀x P(x) ≡ ∃x ¬P(x)</span>
+<span class="keyword">const</span> tidakSemuaCumlaude = mahasiswa.<span class="function">some</span>(m => !<span class="function">cumlaude</span>(m));
+console.<span class="function">log</span>(<span class="string">"¬∀x Cumlaude ≡ ∃x ¬Cumlaude:"</span>, tidakSemuaCumlaude);
+
+<span class="comment">// 6. Universal Instantiation — ∀x P(x) → P(a)</span>
+<span class="keyword">const</span> semuaLulusTepat = mahasiswa.<span class="function">every</span>(lulusTepat);
+<span class="keyword">if</span> (semuaLulusTepat) {
+  <span class="keyword">const</span> andi = mahasiswa.<span class="function">find</span>(m => m.nama === <span class="string">"Andi"</span>);
+  console.<span class="function">log</span>(<span class="string">"UI - LulusTepat(Andi):"</span>, <span class="function">lulusTepat</span>(andi));
+}
+</code></pre>
+            </div>
+        </section>
+
+        <!-- SLIDE 15: Quiz Interaktif -->
+        <section class="slide" id="quizSlide" data-title="Quiz & Latihan">
+            <div class="slide-content">
+                <h2 class="slide-title">Latihan Pemahaman</h2>
+                <p class="slide-subtitle">Uji pengetahuan Anda tentang Kalkulus Predikat</p>
+
+                <div class="quiz-container" id="quizApp">
+                    <!-- Quiz akan dirender via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: Kesimpulan -->
+        <section class="slide hero-slide" data-title="Kesimpulan">
+            <div class="slide-content">
+                <h2 class="slide-title" style="margin-bottom: 2rem;">Kesimpulan</h2>
+                
+                <div class="card-grid" style="grid-template-columns: repeat(3, 1fr); text-align: left; margin-bottom: 3rem;">
+                    <div class="card">
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Predikat & Domain</h3>
+                        <p style="font-size: 0.9rem;">Predikat adalah pernyataan ber-variabel. Nilai kebenarannya sangat bergantung pada semesta/domain pembicaraan.</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Kuantor</h3>
+                        <p style="font-size: 0.9rem;"><strong>∀ (Universal)</strong> untuk menyatakan "Semua".<br><strong>∃ (Eksistensial)</strong> untuk menyatakan "Ada/Beberapa".</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Aplikasi</h3>
+                        <p style="font-size: 0.9rem;">Sangat krusial untuk membuktikan teorema matematika dan implementasi logika pada bahasa pemrograman (array manipulation, database query).</p>
+                    </div>
+                </div>
+
+                <div style="background-color: var(--white); padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: inline-block;">
+                    <h3 style="margin-bottom: 0.5rem;">Terima Kasih!</h3>
+                    <p style="margin-bottom: 0;">Proyek Akhir Logika Matematika</p>
+                    <p style="font-weight: 600; color: var(--primary);">2026</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-progress-container">
+            <div class="nav-progress-bar" id="progressBar"></div>
+        </div>
+        
+        <button class="nav-menu-btn" onclick="toggleMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <span>Menu Slide</span>
+        </button>
+
+        <div class="nav-controls">
+            <button class="nav-btn" id="btnPrev" onclick="prevSlide()" title="Slide Sebelumnya (Panah Kiri)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <div class="nav-counter" id="slideCounter">01 / 16</div>
+            <button class="nav-btn" id="btnNext" onclick="nextSlide()" title="Slide Selanjutnya (Panah Kanan)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MENU OVERLAY -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-header">
+            <h2>Daftar Slide</h2>
+            <button class="menu-close" onclick="toggleMenu()">&times;</button>
+        </div>
+        <ul class="menu-list" id="menuList">
+            <!-- Diisi via JavaScript -->
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    /* === SLIDE STATE MANAGEMENT === */
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuList = document.getElementById('menuList');
+
+    // Initialize slides and menu
+    function initPresentation() {
+        updateSlideView();
+        buildMenu();
+        
+        // Keydown listener for arrow keys
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+            if(e.key === 'Escape' && menuOverlay.classList.contains('active')) toggleMenu();
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+    }
+
+    function updateSlideView() {
+        // Update active classes
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+                slide.scrollTop = 0; // Reset scroll on slide change
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        // Update nav buttons
+        btnPrev.disabled = currentSlide === 0;
+        btnNext.disabled = currentSlide === totalSlides - 1;
+
+        // Update counter & progress
+        let displayNum = (currentSlide + 1).toString().padStart(2, '0');
+        slideCounter.textContent = `${displayNum} / ${totalSlides}`;
+        progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+        // Update Menu UI if open
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((item, idx) => {
+            if(idx === currentSlide) item.classList.add('current');
+            else item.classList.remove('current');
+        });
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlideView();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlideView();
+        }
+    }
+
+    function goToSlide(index) {
+        if (index >= 0 && index < totalSlides) {
+            currentSlide = index;
+            updateSlideView();
+            toggleMenu(); // close menu
+        }
+    }
+
+    /* === MENU OVERLAY === */
+    function toggleMenu() {
+        menuOverlay.classList.toggle('active');
+    }
+
+    function buildMenu() {
+        slides.forEach((slide, index) => {
+            const title = slide.getAttribute('data-title') || `Slide ${index + 1}`;
+            const li = document.createElement('li');
+            li.className = 'menu-item';
+            li.innerHTML = `
+                <span class="menu-item-num">${(index + 1).toString().padStart(2, '0')}</span>
+                <span>${title}</span>
+            `;
+            li.onclick = () => goToSlide(index);
+            menuList.appendChild(li);
+        });
+    }
+
+    /* === ACCORDION === */
+    function toggleAccordion(button) {
+        const item = button.parentElement;
+        const isActive = item.classList.contains('active');
+        
+        // Close all other accordions
+        document.querySelectorAll('.accordion-item').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // Toggle clicked one
+        if (!isActive) {
+            item.classList.add('active');
+        }
+    }
+
+    /* === STEPPER === */
+    let currentStep = 0;
+    function nextStepper() {
+        const steps = document.querySelectorAll('#inferensiStepper .step');
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            steps[currentStep].classList.add('active');
+            
+            if (currentStep === steps.length - 1) {
+                document.getElementById('btnNextStep').style.display = 'none';
+            }
+        }
+    }
+
+    /* === QUIZ LOGIC === */
+    const quizData = [
+        {
+            question: "Manakah dari berikut ini yang merupakan predikat?",
+            options: [
+                "Ibukota Indonesia adalah Jakarta",
+                "x > 5",
+                "2 + 3 = 5",
+                "Apakah kamu sudah makan?"
+            ],
+            correct: 1,
+            explanation: "Predikat adalah pernyataan yang mengandung variabel (x) dan nilai kebenarannya bergantung pada variabel tersebut."
+        },
+        {
+            question: "Notasi ∀x P(x) dibaca...",
+            options: [
+                "Ada sebagian x yang memenuhi P(x)",
+                "Untuk semua x, berlaku P(x)",
+                "Bukan x yang memenuhi P(x)",
+                "Jika x maka P(x)"
+            ],
+            correct: 1,
+            explanation: "Simbol ∀ (A terbalik) adalah Kuantor Universal, dibaca 'Untuk semua' atau 'Untuk setiap'."
+        },
+        {
+            question: "Apa negasi (kebalikan) dari ∀x P(x)?",
+            options: [
+                "∀x ¬P(x)",
+                "∃x P(x)",
+                "∃x ¬P(x)",
+                "¬∃x P(x)"
+            ],
+            correct: 2,
+            explanation: "Berdasarkan Hukum De Morgan, membantah 'Semua x memenuhi P' sama dengan mengatakan 'Ada x yang TIDAK memenuhi P'."
+        },
+        {
+            question: "Dalam pernyataan ∀x ∃y R(x,y), variabel x adalah...",
+            options: [
+                "Variabel bebas",
+                "Konstanta",
+                "Variabel terikat",
+                "Domain"
+            ],
+            correct: 2,
+            explanation: "x adalah variabel terikat (bound variable) karena ia dikendalikan oleh kuantor ∀x."
+        },
+        {
+            question: "Jika domain adalah himpunan Bilangan Bulat, apakah ∃x (x² = 9) bernilai benar?",
+            options: [
+                "Benar",
+                "Salah",
+                "Tidak dapat ditentukan",
+                "Hanya benar untuk bilangan positif"
+            ],
+            correct: 0,
+            explanation: "Benar. Karena ADA bilangan bulat x yaitu 3 (dan -3) sedemikian rupa sehingga kuadratnya adalah 9."
+        }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    function renderQuiz() {
+        const quizApp = document.getElementById('quizApp');
+        
+        if (currentQuizIndex >= quizData.length) {
+            // Show Final Result
+            const percent = Math.round((quizScore / quizData.length) * 100);
+            let msg = percent === 100 ? "Sempurna! Anda menguasai Kalkulus Predikat." : 
+                      percent >= 60 ? "Kerja bagus! Anda sudah memahami dasar-dasarnya." : 
+                      "Jangan menyerah, coba pelajari ulang materinya!";
+            
+            quizApp.innerHTML = `
+                <div class="quiz-result" style="display: block; animation: fadeIn 0.5s ease;">
+                    <h3>Hasil Quiz</h3>
+                    <div class="quiz-score-circle">
+                        <span>${percent}%</span>
+                    </div>
+                    <p style="font-size: 1.2rem; margin-bottom: 1rem;">Skor Anda: <strong>${quizScore} / ${quizData.length}</strong></p>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">${msg}</p>
+                    <button class="btn btn-outline" onclick="resetQuiz()">Coba Lagi</button>
+                </div>
+            `;
+            return;
+        }
+
+        const q = quizData[currentQuizIndex];
+        
+        let html = `
+            <div class="quiz-header">
+                <span style="font-weight: 600; color: var(--secondary);">Soal ${currentQuizIndex + 1} dari ${quizData.length}</span>
+                <span class="badge">Skor: ${quizScore}</span>
+            </div>
+            <div class="quiz-question">${q.question}</div>
+            <div class="quiz-options" id="quizOptions">
+        `;
+
+        q.options.forEach((opt, idx) => {
+            html += `<button class="quiz-option" onclick="selectAnswer(${idx}, this)">${String.fromCharCode(65+idx)}. ${opt}</button>`;
+        });
+
+        html += `
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+            <div class="quiz-controls">
+                <button class="btn btn-primary" id="btnQuizNext" onclick="nextQuizQuestion()" style="display: none;">Lanjut &rarr;</button>
+            </div>
+        `;
+
+        quizApp.innerHTML = html;
+        quizAnswered = false;
+    }
+
+    function selectAnswer(index, btnEl) {
+        if (quizAnswered) return; // Prevent multiple answers
+        
+        quizAnswered = true;
+        const q = quizData[currentQuizIndex];
+        const options = document.querySelectorAll('.quiz-option');
+        const feedback = document.getElementById('quizFeedback');
+        const btnNext = document.getElementById('btnQuizNext');
+
+        // Disable all options
+        options.forEach(opt => opt.style.cursor = 'default');
+
+        if (index === q.correct) {
+            btnEl.classList.add('correct');
+            quizScore++;
+            feedback.innerHTML = `<strong>✅ Benar!</strong> ${q.explanation}`;
+            feedback.style.backgroundColor = '#d1fae5';
+            feedback.style.color = '#065f46';
+        } else {
+            btnEl.classList.add('wrong');
+            options[q.correct].classList.add('correct'); // Show correct answer
+            feedback.innerHTML = `<strong>❌ Salah.</strong> ${q.explanation}`;
+            feedback.style.backgroundColor = '#fee2e2';
+            feedback.style.color = '#991b1b';
+        }
+
+        feedback.classList.add('show');
+        btnNext.style.display = 'inline-flex';
+    }
+
+    function nextQuizQuestion() {
+        currentQuizIndex++;
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        currentQuizIndex = 0;
+        quizScore = 0;
+        renderQuiz();
+    }
+
+    // Init App
+    window.onload = () => {
+        initPresentation();
+        renderQuiz();
+    };
+
+</script>
+</body>
+</html>
